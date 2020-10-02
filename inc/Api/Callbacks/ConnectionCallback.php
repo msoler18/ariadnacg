@@ -42,9 +42,8 @@ class ConnectionCallback extends BaseController
     curl_close($curl);
 
     $productsInstance = new ProductsCallback($token);
-    $products = $productsInstance->getProducts();
-
-    echo $products;
+    $productsInstance->sync();
+    
     
 
   }

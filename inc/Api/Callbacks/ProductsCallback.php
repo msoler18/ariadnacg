@@ -18,7 +18,7 @@ class ProductsCallback extends BaseController
     $this->token = $token;
   }
 
-  public function getProducts(){
+  public function sync(){
 
     
     $enpoint_products = esc_attr( get_option( 'endpoint_products' ) );
@@ -45,9 +45,81 @@ class ProductsCallback extends BaseController
     ));
 
     $response = curl_exec($curl);
+    $parse_response = json_decode($response,true);
 
     curl_close($curl);
-    echo $response;
+    
+    $products_status = $this->createProducts($parse_response);
+
+    echo $products_status;
+  
+  }
+
+  public function createProducts($products) {
+
+    $has_error = "";
+
+    try {
+      $has_error = "not";
+      foreach($products["items"] as $product){
+        if($product['status'] == 1 && $product['type_id'] == "simple"){
+          if($this->product_exist($product['id'])) {
+            $post_id = wp_update_post(array (
+                'post_type' => 'productos',
+                'post_title' => $product['name'],
+                'meta_key'    => 'id_product',
+                'meta_value'  => $product['id'],
+            ));
+          } else {
+            $post_id = wp_insert_post(array (
+                'post_type' => 'productos',
+                'post_title' => $product['name'],
+                'post_status' => 'publish',
+                'comment_status' => 'closed',   
+                'ping_status' => 'closed', 
+            ));
+          }
+
+          $path = "http://desarrollomagento.ariadna.co/pub/media/catalog/product/";
+          $image = $product['media_gallery_entries'][0]["file"];
+
+          if ($post_id) {
+              add_post_meta($post_id, 'id_product', $product['id']);
+              add_post_meta($post_id, 'status', $product['status']);
+              add_post_meta($post_id, 'name', $product['name']);
+              add_post_meta($post_id, 'price', $product['price']);
+              add_post_meta($post_id, 'type_id', $product['type_id']);
+              add_post_meta($post_id, 'media_gallery_entries', $path . $image );
+          }
+
+        }
+      };
+    } catch(Exception $e) {
+      echo 'Error to retreive products: ',  $e->getMessage(), "\n";
+      $has_error = "yes";
+    }
+    
+    return $has_error;    
+
+  }
+
+
+  public function product_exist($id) {
+
+    $args = array(
+    'post_type'   => 'productos',
+    'meta_key'    => 'id_product',
+    'meta_value'  => $id,
+    );
+
+    $products = get_posts($args);
+    $exist = false;
+
+    if( is_array($products) && sizeof($products) > 0 ){
+      $exist = true;
+    }
+
+    return $exist;
 
   }
 

@@ -12,7 +12,11 @@ jQuery(function ($) {
         console.log('sending')
       },
       success: function(result){
-        console.log(result)
+        let boxMessage = document.getElementById('connection-result');
+        boxMessage.innerHTML = `
+          <h4>Productos sincronizados con éxito</h4>
+          <a style="margin:5% 0; display:block;" href="/ariadnacg/wp-admin/edit.php?post_type=productos">Ver productos</a>
+        `
       },
       fail:function(error){
         console.log(error)
