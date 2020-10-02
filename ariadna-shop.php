@@ -35,13 +35,10 @@ function deactivate_ariadna_plugin(){
 register_deactivation_hook('__FILE__','deactivate_ariadna_plugin');
 
 
-
 if( class_exists( 'Ariadna\\Init' ) ){
   Ariadna\Init::register_services();
   Ariadna\Init::register_shortcodes();
 }
 
-$pg_instance = new BaseController();
-include($pg_instance->plugin_path . 'inc/Templates/confirmation.php');
 
 ?>
