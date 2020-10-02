@@ -1,0 +1,11 @@
+
+
+/* Payment */
+#send-info-package{display: table;margin: 8% auto 1% auto;width: 70%;}
+
+/* Response Shortcode */
+.ms-response-message{padding:5% 0;}
+.ms-response-message h2{text-align: center;font-size: 1.8rem;}
+.ms-response-message a{margin-top:5%;}
+.ms-heading-table{text-align: center;}
+.ms-response-table td:nth-child(odd){font-weight: bold;}

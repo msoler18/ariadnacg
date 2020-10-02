@@ -1,0 +1,19 @@
+{
+    "name": "imac/ariadna-shop",
+    "description": "Ariadna Shop Plugin For retreive api elements",
+    "type": "no",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Miguel Soler",
+            "email": "msoler735@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "curl/curl": "^2.0"
+    },
+    "autoload":{
+        "psr-4": {"Ariadna\\": "./inc"}
+    }
+}
